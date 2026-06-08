@@ -78,6 +78,8 @@
   border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
+  flex: 1;
+  max-width: 200px;
 }
 
 .cta-btn:hover {
