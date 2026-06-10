@@ -21,4 +21,7 @@ CREATE TABLE passwords (
     changed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
+INSERT INTO users (username, passwords, mfa_enabled, totp_secret)
+VALUES ('admin', 'password123', true, 'JBSWY3DPEHPK3PXP');
+
 CREATE INDEX idx_users_username ON users(username);

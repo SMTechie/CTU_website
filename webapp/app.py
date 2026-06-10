@@ -28,7 +28,7 @@ def login():
     # 2. Check the database for the user's password and registration secret
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT password_hash, totp_secret FROM users WHERE username = %s;", (username,))
+    cursor.execute("SELECT passwords, totp_secret FROM users WHERE username = %s;", (username,))
     user_record = cursor.fetchone()
     cursor.close()
     conn.close()
