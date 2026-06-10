@@ -1,0 +1,35 @@
+/* global variables for style consistency */
+:root{
+    --primary: #3B82F6;
+    --border-color: #c9c9c9;
+    --header-color: black;
+    --paragraph-color: #6d6d6d;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+}
+
+.section{
+    border-bottom: 1px solid var(--border-color);
+}
+
+
+.container{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h1{
+    font-size: 2.5rem;
+}
+
+h2{
+    font-size: 2rem;
+}
+
+h3{
+    font-size: 1.5rem;
+}
