@@ -1,14 +1,13 @@
-FROM node:22
+FROM python:3.10
 
 WORKDIR /app
 
-COPY package*.json ./
-
-RUN npm install
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 8080
 
-CMD ["node", "app.js"]
+CMD ["python", "app.py"]
 
