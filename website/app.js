@@ -29,6 +29,18 @@ app.post("/contact-submit", async (req, res) =>{
 
     const ticketId = result.rows[0].id;
 
+    await fetch("http://webapp2:8080/email/ticket-created", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: name,
+            email: email,
+            subject: message
+        })
+    });
+
     res.json({
         message: "Form received successfully"
     });

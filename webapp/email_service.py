@@ -42,16 +42,16 @@ def send_email(to_email, subject, body):
 # ticket created
 def send_ticket_created_email(name, email, subject):
     body = f"""
-Hi {name},
+    Hi {name},
 
-Your ticket has been created successfully.
+    Your ticket has been created successfully.
 
-Subject: {subject}
+    Subject: {subject}
 
-We have received your request and a representative will contact you shortly.
+    We have received your request and a representative will contact you shortly.
 
-Thank you.
-"""
+    Thank you.
+    """
 
     return send_email(email, "Ticket Created", body)
 

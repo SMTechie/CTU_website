@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect
 import psycopg2
 # 📥 Integrated: Importing your teammate's clean verification function
 from mfa import verify_mfa  
-from email_service import send_status_update_email, send_comment_notification
+from email_service import send_status_update_email, send_comment_notification, send_ticket_created_email
 
 app = Flask(__name__)
 
@@ -175,6 +175,20 @@ def add_comment(ticket_id):
 
 
     return redirect('/websitename/portal/tickets')
+
+
+@app.route('/email/ticket-created', methods=['POST'])
+def email_ticket_created():
+    data = request.json
+
+    send_ticket_created_email(
+        data["name"],
+        data["email"],
+        data["subject"]
+    )
+
+    return {"status": "sent"}
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=8080)
