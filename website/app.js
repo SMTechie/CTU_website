@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const pool = require("./db");
 
 const app = express();
 
@@ -15,10 +16,28 @@ app.get("/websitename", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.post("/websitename/contact-submit", (req, res) =>{
-    const {name, email, message} = req.body;
+app.post("/contact-submit", async (req, res) =>{
+    try{
+        const {name, email, message} = req.body;
 
-    res.send({message: "Form received successfully!"});
+    const result = await pool.query(
+        `INSERT INTO tickets (name, email, message, status)
+        VALUES ($1, $2, $3, $4)
+        RETURNING id`,
+        [name, email, message, "New"]
+    );
+
+    const ticketId = result.rows[0].id;
+
+    res.json({
+        message: "Form received successfully"
+    });
+
+    }catch(err){
+        console.log(err);
+        res.status(500).json({message: "Error submitting ticket"});
+    }
+    
 })
 
 app.listen(3000, "0.0.0.0", () => {

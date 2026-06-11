@@ -1,0 +1,107 @@
+/* ==========================================================================
+   CTU CRM CLEAN CONTACT FORM COMPONENT 
+   ========================================================================== */
+
+#contact-crm {
+    padding: 60px 20px;
+    background-color: #ffffff;
+}
+
+#contact-crm .container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Header Text Alignments */
+#contact-crm .services-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+#contact-crm .services-title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #2563eb; /* Kept your vibrant blue heading color */
+    margin-bottom: 12px;
+    font-family: 'Poppins', sans-serif;
+}
+
+#contact-crm .services-subtitle {
+    font-size: 16px;
+    color: #555555;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Centralized Form Engine Grid Wrapper */
+.contact-form-wrapper {
+    max-width: 600px; 
+    width: 100%;
+    margin: 0 auto;
+}
+
+.crm-contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Perfect, uniform vertical spacing between blocks */
+}
+
+/* Enforces complete vertical block behavior */
+.crm-contact-form .input-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Explicitly hide standard labels to favor inside layout design */
+.crm-contact-form .input-group label {
+    display: none !important;
+}
+
+/* Clean, Spacious Inputs & Textareas */
+.crm-contact-form input,
+.crm-contact-form textarea {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px; 
+    font-family: inherit;
+    background-color: #fafafa;
+    color: #333333;
+    transition: all 0.25s ease;
+}
+
+.crm-contact-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Interactive Focus States */
+.crm-contact-form input:focus,
+.crm-contact-form textarea:focus {
+    border-color: #2563eb;
+    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+/* Stretched Execution Call-To-Action Button */
+.crm-contact-form .btn-primary {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.crm-contact-form .btn-primary:hover {
+    background-color: #1d4ed8;
+}

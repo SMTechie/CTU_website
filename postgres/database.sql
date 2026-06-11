@@ -28,7 +28,6 @@ CREATE TABLE tickets (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    subject VARCHAR(150) NOT NULL,
     message TEXT NOT NULL,
     status VARCHAR(20) DEFAULT 'New' NOT NULL,
     CONSTRAINT chk_ticket_status CHECK (status IN ('New', 'Assigned', 'In Progress', 'Resolved')), 
