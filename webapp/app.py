@@ -19,6 +19,25 @@ def get_db_connection():
 def home():
     return render_template('login.html')
 
+def record_audit_log(username, event_text):
+    """Executes a secure database INSERT query to upload login event data."""
+    try:
+        print("AUDIT DEBUG 1:", username, event_text)
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Parameterized query matching your exact columns: username, event
+        query = """INSERT INTO audit_logs (username, event) VALUES (%s, %s);"""
+        cursor.execute(query, (username, event_text))
+
+        conn.commit()
+        print("commitdone", flush=True)
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        print(f"Error recording audit log: {e}", flush=True)
+
+
 @app.route('/login', methods=['POST'])
 def login():
     # 1. Grab the values out of the HTML form fields using their 'name' attributes
@@ -42,10 +61,14 @@ def login():
             
             # 4. ✅ JODINE'S PART 
             if verify_mfa(db_totp_secret, totp_token):
+                record_audit_log(username, 'Login Success')
                 return "Authentication Successful! Welcome to the portal."
             else:
+                record_audit_log(username, 'Login Failed - MFA Invalid')
                 return "MFA Code is invalid.", 401
                 
+    safe_username = username if username else "Unknown"
+    record_audit_log(safe_username, 'Login Failed - Bad Credentials')
     return "Invalid username or password.", 401
 
 
