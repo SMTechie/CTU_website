@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect
 import psycopg2
 # 📥 Integrated: Importing your teammate's clean verification function
 from mfa import verify_mfa  
+from email_service import send_status_update_email, send_comment_notification
 
 app = Flask(__name__)
 
@@ -110,6 +111,13 @@ def update_ticket_status(ticket_id):
     cursor = conn.cursor()
 
     cursor.execute("""
+        SELECT name, email
+        FROM tickets
+        WHERE id = %s
+    """, (ticket_id,))
+    ticket = cursor.fetchone()
+
+    cursor.execute("""
         UPDATE tickets
         SET status = %s
         WHERE id = %s
@@ -118,6 +126,15 @@ def update_ticket_status(ticket_id):
     conn.commit()
     cursor.close()
     conn.close()
+
+    try:
+        send_status_update_email(
+            ticket[0],
+            ticket[1],
+            new_status
+        )
+    except Exception as e:
+        print("Email failed:", e)
 
     return redirect('/websitename/portal/tickets')
 
@@ -129,6 +146,14 @@ def add_comment(ticket_id):
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # Get ticket owner details
+    cursor.execute("""
+        SELECT name, email
+        FROM tickets
+        WHERE id = %s
+    """, (ticket_id,))
+    ticket = cursor.fetchone()
+
     cursor.execute("""
         INSERT INTO ticket_comments (ticket_id, comment)
         VALUES (%s, %s)
@@ -137,6 +162,17 @@ def add_comment(ticket_id):
     conn.commit()
     cursor.close()
     conn.close()
+
+    # Send email notification
+    try:
+        send_comment_notification(
+            ticket[0],  # name
+            ticket[1],  # email
+            comment_text
+        )
+    except Exception as e:
+        print("Comment email failed:", e)
+
 
     return redirect('/websitename/portal/tickets')
 

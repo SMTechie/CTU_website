@@ -44,6 +44,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: postgres
       INSTANCE_NAME: Web_App_2
+      EMAIL_PASSWORD: "pmpk zvvg mtut ajty"
 
     depends_on:
       - postgres
