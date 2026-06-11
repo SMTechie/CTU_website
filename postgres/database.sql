@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
     user_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
+    passwords VARCHAR(255) NOT NULL,
     mfa_enabled BOOLEAN DEFAULT FALSE NOT NULL,
     totp_secret VARCHAR(128) DEFAULT NULL,                         
     account_status VARCHAR(20) DEFAULT 'active' NOT NULL, 
@@ -49,7 +49,7 @@ CREATE TABLE audit_logs (
     timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-INSERT INTO users (username, password_hash, mfa_enabled, totp_secret)
+INSERT INTO users (username, passwords, mfa_enabled, totp_secret)
 VALUES ('admin', 'password123', true, 'JBSWY3DPEHPK3PXP');
 
 CREATE INDEX idx_users_username ON users(username);
