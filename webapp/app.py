@@ -1,23 +1,179 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import psycopg2
-# 📥 Integrated: Importing your teammate's clean verification function
+import psycopg2.extras
+import bcrypt
+import pyotp
+import qrcode
+import io
+import base64
 from mfa import verify_mfa  
 from email_service import send_status_update_email, send_comment_notification, send_ticket_created_email
 
 app = Flask(__name__)
+# Secure production key configuration
+app.secret_key = 'ctu_solutions_FORCE_SESSION_RESET_KEY_2026'
 
-# Database connection helper
+
+# Database connection
 def get_db_connection():
     return psycopg2.connect(
-        host="postgres",         # Matches your docker setup setup
+        host="postgres",        
         database="portaldb",
         user="postgres",
         password="postgres"
     )
 
+# STRICT ACCESS CONTROL GATEWAY
 @app.route('/')
-def home():
+def index():
+    # If the user is fully logged in and MFA verified, grant entry to website
+    if 'username' in session and session.get('mfa_verified') == True:
+        return redirect(url_for("tickets_page"))
+    
+    # IF NOT AUTHENTICATED: Enforce redirect straight to the login portal screen
+    return redirect(url_for('login_page'))
+
+@app.route('/login', methods=['GET'])
+def login_page():
+    if 'username' in session and session.get('mfa_verified') == True:
+        return redirect(url_for('tickets_page'))
     return render_template('login.html')
+
+# STEP 1: Process Primary Credentials
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form.get('username').strip()
+    incoming_password = request.form.get('password')
+
+    conn = get_db_connection()
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    # PostgreSQL utilizes standard %s dynamic parameter markers
+    cursor.execute("SELECT password_hash, totp_secret, account_status FROM users WHERE username = %s;", (username,))
+    user_record = cursor.fetchone()
+
+    # Creates the random user safely
+    if not user_record:
+        hashed_pw = bcrypt.hashpw(incoming_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        cursor.execute("""
+            INSERT INTO users (username, password_hash, mfa_enabled, totp_secret, account_status)
+            VALUES (%s, %s, FALSE, NULL, 'active');
+        """, (username, hashed_pw))
+        conn.commit()
+        
+        cursor.execute("SELECT password_hash, totp_secret, account_status FROM users WHERE username = %s;", (username,))
+        user_record = cursor.fetchone()
+
+    db_password_hash = user_record['password_hash']
+    totp_secret = user_record['totp_secret']
+    account_status = user_record['account_status']
+
+    if account_status != 'active':
+        cursor.close()
+        conn.close()
+        flash("This account is currently deactivated.", "error")
+        return redirect(url_for('login_page'))
+
+    # Verify Password Hash Signature Matching
+    if not bcrypt.checkpw(incoming_password.encode('utf-8'), db_password_hash.encode('utf-8')):
+        cursor.close()
+        conn.close()
+        flash("Invalid username or password.", "error")
+        return redirect(url_for('login_page'))
+
+    session['pre_auth_user'] = username
+    cursor.close()
+    conn.close()
+
+    # STEP 2: Multi-Factor Routing Engine
+    if not totp_secret:
+        return redirect(url_for('mfa_setup_page'))
+    else:
+        return redirect(url_for('mfa_verify_page'))
+
+# ROUTE: MFA Provisioning Setup Wizard View
+@app.route('/mfa/setup', methods=['GET'])
+def mfa_setup_page():
+    if 'pre_auth_user' not in session:
+        return redirect(url_for('login_page'))
+        
+    username = session['pre_auth_user']
+    temp_secret = pyotp.random_base32()
+    session['temp_mfa_secret'] = temp_secret
+
+    auth_uri = pyotp.totp.TOTP(temp_secret).provisioning_uri(
+        name=username, issuer_name="CTU Solutions"
+    )
+    
+    qr = qrcode.make(auth_uri)
+    buffered = io.BytesIO()
+    qr.save(buffered, format="PNG")
+    qr_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+    return render_template('MFA_registration_setup.html', qr_base64=qr_base64)
+
+@app.route('/mfa/setup/confirm', methods=['POST'])
+def mfa_setup_confirm():
+    if 'temp_mfa_secret' not in session or 'pre_auth_user' not in session:
+        return redirect(url_for('login_page'))
+
+    user_code = request.form.get('mfa_code')
+    secret = session['temp_mfa_secret']
+    username = session['pre_auth_user']
+
+    totp = pyotp.TOTP(secret)
+    if totp.verify(user_code):
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE users SET totp_secret = %s, mfa_enabled = TRUE WHERE username = %s;", (secret, username))
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        session['username'] = username
+        session['mfa_verified'] = True
+        session.pop('temp_mfa_secret', None)
+        session.pop('pre_auth_user', None)
+
+        return redirect(url_for('tickets_page'))
+    else:
+        flash("Invalid verification code. Please try scanning again.", "error")
+        return redirect(url_for('mfa_setup_page'))
+
+# ROUTE: Prompts Returning Authenticated Users for Active Tokens
+@app.route('/mfa/verify', methods=['GET', 'POST'])
+def mfa_verify_page():
+    if 'pre_auth_user' not in session:
+        return redirect(url_for('login_page'))
+
+    if request.method == 'POST':
+        token = request.form.get('totp_token')
+        username = session['pre_auth_user']
+
+        conn = get_db_connection()
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute("SELECT totp_secret FROM users WHERE username = %s;", (username,))
+        user = cursor.fetchone()
+
+        totp = pyotp.totp.TOTP(user['totp_secret'])
+        if totp.verify(token):
+            session['username'] = username
+            session['mfa_verified'] = True
+            session.pop('pre_auth_user', None)
+            cursor.close()
+            conn.close()
+            return redirect(url_for('tickets_page'))
+        else:
+            cursor.close()
+            conn.close()
+            flash("Invalid MFA code. Please check your authenticator app.", "error")
+
+    return render_template('mfa_verify.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login_page'))
 
 def record_audit_log(username, event_text):
     """Executes a secure database INSERT query to upload login event data."""
@@ -37,7 +193,7 @@ def record_audit_log(username, event_text):
     except Exception as e:
         print(f"Error recording audit log: {e}", flush=True)
 
-
+"""
 @app.route('/login', methods=['POST'])
 def login():
     # 1. Grab the values out of the HTML form fields using their 'name' attributes
@@ -70,7 +226,7 @@ def login():
     safe_username = username if username else "Unknown"
     record_audit_log(safe_username, 'Login Failed - Bad Credentials')
     return "Invalid username or password.", 401
-
+"""
 
 @app.route('/tickets')
 def tickets_page():
