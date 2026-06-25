@@ -1,0 +1,25 @@
+services:
+  webapp:
+    build: .
+    container_name: ctu_webapp
+    restart: unless-stopped
+    environment:
+      - FLASK_SECRET_KEY=replace-with-a-secure-key
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+    volumes:
+      - .:/app:cached
+    ports:
+      - "3001:3001"
+
+  nginx:
+    image: nginx:latest
+    container_name: ctu_nginx
+    restart: unless-stopped
+    depends_on:
+      - webapp
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro

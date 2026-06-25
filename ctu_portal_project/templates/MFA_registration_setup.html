@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MFA Security Setup - CTU Solutions</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card login-card--centered">
+            <h2>MFA Activation</h2>
+            <p class="setup-instructions">
+                Scan this QR code using <strong>Google Authenticator</strong> or <strong>Microsoft Authenticator</strong> on your phone.
+            </p>
+
+            <div class="qr-container">
+                <img src="data:image/png;base64,{{ qr_base64 }}" alt="MFA QR Verification Matrix">
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form action="/mfa/setup/confirm" method="POST">
+                <div class="form-group">
+                    <label for="mfa_code">Enter 6-Digit Verification Token</label>
+                    <input 
+                        type="text" 
+                        id="mfa_code" 
+                        name="mfa_code" 
+                        placeholder="000000" 
+                        maxlength="6" 
+                        required 
+                        autocomplete="off"
+                        class="form-control totp-input"
+                    >
+                </div>
+                
+                <button type="submit" class="btn-submit">Verify & Link Device</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

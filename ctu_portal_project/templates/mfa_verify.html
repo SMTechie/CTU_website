@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Factor Verification - CTU Solutions</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h2>Two-Factor Security</h2>
+            <p class="setup-instructions">Please open your mobile authenticator application to fetch your active security code.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form action="/mfa/verify" method="POST">
+                <div class="form-group">
+                    <label for="totp_token">Security Token</label>
+                    <input 
+                        type="text" 
+                        id="totp_token" 
+                        name="totp_token" 
+                        placeholder="000000" 
+                        maxlength="6" 
+                        required 
+                        autocomplete="off"
+                        class="form-control totp-input"
+                    >
+                </div>
+                
+                <button type="submit" class="btn-submit">Confirm Code</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
