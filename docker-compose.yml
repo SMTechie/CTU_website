@@ -35,7 +35,7 @@ services:
     build: ./webapp
     container_name: webapp2
     ports:
-      - "8080:8080"
+      - "3001:3001"
 
     environment:
       DB_HOST: postgres
