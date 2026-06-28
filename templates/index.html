@@ -345,7 +345,7 @@
         </div>
 
         <div class="contact-form-wrapper">
-            <form action="/websitename/contact-submit" method="POST" class="crm-contact-form">
+            <form action="/contact-submit" method="POST" class="crm-contact-form">
                 
                 <div class="input-group">
                     <label for="contact_name">Full Name</label>
@@ -364,6 +364,11 @@
 
                 <button type="submit" class="btn-primary">Submit</button>
             </form>
+            {% for category, message in get_flashed_messages(with_categories=true) %}
+              <p style="color:red; font-size:20px;">
+                {{ category }} - {{ message }}
+              </p>
+            {% endfor %}
         </div>
 
     </div>
