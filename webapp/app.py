@@ -12,7 +12,6 @@ import email_service
 import mfa
 import ticket_service
 
-print("app started")
 app = Flask(
     __name__,
     template_folder='../templates',  # Points directly to your outer templates directory
@@ -27,8 +26,8 @@ def get_db_connection():
     return psycopg2.connect(
         host="postgres",        
         database="portaldb",
-        user="postgres",
-        password="postgres"
+        user=os.environ.get("DB_USER"),
+        password=os.environ.get("DB_PASSWORD")
     )
 
 def close_db(cursor, conn):

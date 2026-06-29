@@ -89,8 +89,4 @@ def send_comment_notification(name, email, comment):
 
 # Testing
 if __name__ == "__main__":
-    send_ticket_created_email(
-        "Jodine",
-        "jodinelemena@gmail.com",
-        "Testing the CRM email system"
-    )
+    print('Email Service Started')

@@ -1,38 +1,126 @@
-# CTU Training Solutions Website
+# CTU Training Solutions Portal
 
-A responsive, single-page website built as a team project for CTU Training Solutions.  
-The website showcases the institution’s services using a modern, minimal design approach.
-
----
-
-## 🌐 Project Overview
-
-This project is a static website built using HTML and CSS.  
-Each team member was responsible for designing and developing a specific section of the page, which was later integrated into a single unified layout.
+A web portal built with Flask, PostgreSQL, and Docker for CTU Training Solutions. The application provides user authentication, email functionality, multi-factor authentication (MFA), and a ticketing system.
 
 ---
 
-## 🚀 Features
+# Features
 
-- Modern responsive layout
-- Service-based section design
-- Clean and minimal UI
-- Reusable CSS structure using variables
-- Mobile-friendly structure
-
----
-
-## 🛠️ Technologies Used
-
-- HTML5 — page structure and content
-- CSS3 — styling and layout
-- Git — version control and collaboration
-- GitHub — repository hosting and team workflow
+* User authentication
+* Multi-Factor Authentication (MFA)
+* Email notifications
+* Ticket management system
+* PostgreSQL database
+* Dockerized deployment
+* Multiple web application instances
 
 ---
 
-## ▶️ How to Run
+# Technologies Used
 
-1. Clone the repository:
+* Python 3
+* Flask
+* PostgreSQL
+* Nginx
+* Docker & Docker Compose
+* HTML5
+* CSS3
+* JavaScript
+
+---
+
+# Prerequisites
+
+Before running the project, ensure you have installed:
+
+* Docker Desktop (or Docker Engine + Docker Compose)
+* Git
+
+---
+
+# Setup
+
+## 1. Clone the repository
+
 ```bash
-git clone <repo-url>
+git clone <repository-url>
+cd <repository-folder>
+```
+
+## 2. Create a `.env` file
+
+Copy the example environment file into your `.env` file
+
+Or simply duplicate `env.example` and rename it to `.env`.
+
+Fill in the following values:
+
+```env
+EMAIL_USERNAME_ENV=your-email@example.com
+EMAIL_PASSWORD_ENV=your-email-app-password
+
+FLASK_SECRET_KEY_ENV=your-generated-secret-key
+
+DB_USER_ENV=portaluser
+DB_PASSWORD_ENV=your-database-password
+
+```
+
+Generate a Flask secret key using:
+
+```bash
+python -c "import secrets; print(secrets.token_hex(32))"
+```
+
+---
+
+## 3. Build and start the containers
+
+```bash
+docker compose up --build
+```
+
+To run in the background:
+
+```bash
+docker compose up -d --build
+```
+
+---
+
+## 4. Stop the application
+
+```bash
+docker compose down
+```
+
+To also remove the PostgreSQL database volume:
+
+```bash
+docker compose down -v
+```
+
+---
+
+# Project Structure
+
+```
+.
+├── docker-compose.yml
+├── Dockerfile
+├── .env
+├── env.example
+├── nginx/ contains the nginx config
+├── postgres/ contains the postgress database
+├── templates/ contains the html files
+├── website/ contains css and assets
+└── webapp/ contains python files to run the app
+```
+
+---
+
+# Notes
+
+* Never commit your `.env` file. Use `.gitignore` to put the `.env` file in the list of files for git to ignore
+* The database credentials in `.env` must match the PostgreSQL container credentials.
+* If using Gmail, create an App Password rather than using your normal account password.
