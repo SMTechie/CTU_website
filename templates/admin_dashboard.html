@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Super Admin Console - CTU Training Solutions</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div>
+                <h1>CTU Operational Intelligence Center</h1>
+                <p class="dashboard-role">Security Role: <strong>SUPER_ADMIN</strong></p>
+            </div>
+            <a href="/logout" class="btn btn-danger dashboard-logout">Logout</a>
+        </header>
+
+        <section class="metrics-grid">
+            <div class="card emphasized-card">
+                <h3>Actionable Public Inquiries</h3>
+                <div class="metric-value">{{ unread_count }}</div>
+                <p class="metric-label">Unresolved Tickets</p>
+            </div>
+        </section>
+
+        <div class="content-split">
+            <section class="data-table-section">
+                <h2>User Submissions & Ticket Influx</h2>
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email Address</th>
+                            <th>Message Context</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in tickets %}
+                        <tr>
+                            <td class="table-bold">{{ ticket[1] }}</td>
+                            <td>{{ ticket[2] }}</td>
+                            <td class="text-muted">{{ ticket[3] }}</td>
+                            <td>
+                                <span class="status-pill">{{ ticket[4] }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+
+            <aside class="form-control-section">
+                <h2>Add New Course Records</h2>
+                <form action="/portal/courses/add" method="POST" class="admin-form">
+                    <div class="form-field">
+                        <label for="course_code">Course Code</label>
+                        <input type="text" id="course_code" name="course_code" placeholder="e.g., MCSD-01" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Course</button>
+                </form>
+            </aside>
+        </div>
+    </div>
+</body>
+</html>

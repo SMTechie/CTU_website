@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Website</title>
+
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/main.css">
+</head>
+
+<body>
+
+  <!-- NAVIGATION BAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#hero">
+            <img src="/static/assets/ctulogo2.png" alt="CTU Training Solutions logo" height="45">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                <li class="nav-item"><a class="nav-link" href="#hero">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="#courses">Courses</a></li>
+
+                {% if session.get('role') == 'SUPER_ADMIN' %}
+                <li class="nav-item mt-2 mt-lg-0">
+                    <a href="/portal/dashboard" class="btn btn-sm btn-danger ms-lg-2">Admin Dashboard</a>
+                </li>
+                {% endif %}
+                <li class="nav-item mt-2 mt-lg-0">
+                    <a href="/login" class="btn btn-sm btn-primary ms-lg-2">Go to Portal</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="hero">
+    <div class="hero-left">
+      <span class="badge">• MID-YEAR 2026 INTAKE NOW OPEN</span>
+      <h1>Empowering People Through <span>Education</span></h1>
+      <p>Since 1987, CTU Training Solutions has been South Africa's leading private higher education provider — 
+        delivering DHET-registered, CHE-accredited qualifications across IT, Design, Business, Engineering, and 
+        Humanities at 11 campuses nationwide.</p>
+      
+      <div class="cta-group">
+        <a href="#applyModal" onclick="toggleModal(event)" class="btn btn-primary">Apply Now →</a>
+        <a href="#courses" class="btn btn-outline-primary">Explore Courses</a>
+      </div>
+    </div>
+
+    <div class="stats-panel">
+      <h3>CTU At A Glance</h3>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="num">35<span>+</span></div>
+          <div class="label">Years of Excellence</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">11</div>
+          <div class="label">Campuses Across SA</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">8</div>
+          <div class="label">Provinces Covered</div>
+        </div>
+        <div class="stat-card">
+          <div class="num">NQF <span>5–6</span></div>
+          <div class="label">Registered Learnerships</div>
+        </div>
+      </div>
+      <div class="badges-list">
+        <div class="badge-item"><span class="dot"></span>DHET-Registered &amp; CHE-Accredited</div>
+        <div class="badge-item"><span class="dot"></span>Microsoft ISCP Provider 2026</div>
+        <div class="badge-item"><span class="dot"></span>Member of the UXi Private Education Group</div>
+      </div>
+      <div class="faculty-tags">
+        <span class="tag">Information Technology</span>
+        <span class="tag">Design</span>
+        <span class="tag">Business &amp; Management</span>
+        <span class="tag">Engineering</span>
+        <span class="tag">Humanities</span>
+        <span class="tag">Cloud Campus</span>
+      </div>
+      <div class="contact-row">
+        📞 Call us: <a href="tel:0861100395">0861 100 395</a> &nbsp;|&nbsp; WhatsApp: <a href="tel:0838259366">083 825 9366</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES SECTION -->
+  <section class="section" id="services">
+    <div class="container">
+        <div class="services-header">
+          <h2 class="services-title">Services</h2>
+          <p class="services-subtitle">CTU provides a comprehensive range of academic support services to guide every student from enrolment through to graduation.</p>
+        </div>
+
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon-wrap"><i class="ti ti-school"></i></div>
+            <h3 class="service-name">Academic Advising</h3>
+            <p class="service-desc">One-on-one guidance from experienced advisors to help you plan your course load and meet degree requirements.</p>
+            <div class="service-footer">
+              <a href="#contact-crm" class="service-link">Get in Contact</a>
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon-wrap"><i class="ti ti-books"></i></div>
+            <h3 class="service-name">Library & Research</h3>
+            <p class="service-desc">Access to a vast digital and physical library collection, research databases, and librarian-assisted support.</p>
+            <div class="service-footer">
+              <a href="#contact-crm" class="service-link">Get in Contact</a>
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon-wrap"><i class="ti ti-writing"></i></div>
+            <h3 class="service-name">Writing Centre</h3>
+            <p class="service-desc">Free peer and professional tutoring for essays, reports, and dissertations at any stage of writing.</p>
+            <div class="service-footer">
+              <a href="#contact-crm" class="service-link">Get in Contact</a>
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon-wrap"><i class="ti ti-certificate"></i></div>
+            <h3 class="service-name">Examinations Office</h3>
+            <p class="service-desc">Support with exam timetables, special accommodations, supplementary exams, and result queries.</p>
+            <div class="service-footer">
+              <a href="#contact-crm" class="service-link">Get in Contact</a>
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon-wrap"><i class="ti ti-users"></i></div>
+            <h3 class="service-name">Tutoring & Mentorship</h3>
+            <p class="service-desc">Structured peer tutoring and senior-student mentorship programmes to strengthen understanding across modules.</p>
+            <div class="service-footer">
+              <a href="#contact-crm" class="service-link">Get in Contact</a>
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon-wrap"><i class="ti ti-device-laptop"></i></div>
+            <h3 class="service-name">e-Learning Support</h3>
+            <p class="service-desc">Assistance with the CTU online learning portal, digital course materials, and virtual classroom tools.</p>
+            <div class="service-footer">
+              <a href="#contact-crm" class="service-link">Get in Contact</a>
+            </div>
+          </div>
+      </div>
+
+        <div class="services-cta">
+          <div class="cta-left">
+            <i class="ti ti-school cta-icon"></i>
+            <div>
+              <p class="cta-heading">Ready to Start<br>Your Journey?</p>
+              <p class="cta-text">Explore our services and get the support you need to succeed at CTU.</p>
+            </div>
+          </div>
+          <a href="#applyModal" onclick="toggleModal(event)" class="cta-btn btn btn-primary">Apply Now</a>
+        </div>
+    </div>
+  </section>
+  
+  <!-- EXPLORE COURSES SECTION -->
+  <section class="section" id="courses">
+    <div class="container">
+        <div class="services-header">
+            <h2 class="services-title">Explore Courses</h2>
+            <p class="services-subtitle">Discover industry-focused qualifications designed to prepare you for successful careers in technology, business, engineering, design, and more.</p>
+        </div>
+
+        <div class="course-category-grid">
+            <div class="course-category-card">
+                <h3>Information Technology</h3>
+                <p>Software Development, Cyber Security, Networking, Cloud Computing and Data Science.</p>
+            </div>
+
+            <div class="course-category-card">
+                <h3>Business & Management</h3>
+                <p>Project Management, Marketing, Human Resources and Entrepreneurship.</p>
+            </div>
+
+            <div class="course-category-card">
+                <h3>Engineering</h3>
+                <p>Electrical Engineering, Mechanical Engineering and Technical Studies.</p>
+            </div>
+
+            <div class="course-category-card">
+                <h3>Design</h3>
+                <p>Graphic Design, UX/UI Design, Multimedia and Digital Creativity.</p>
+            </div>
+
+            <div class="course-category-card">
+                <h3>Humanities</h3>
+                <p>Communication, Education, Social Development and Leadership.</p>
+            </div>
+
+            <div class="course-category-card">
+                <h3>Cloud Campus</h3>
+                <p>Flexible online study options available anywhere in South Africa.</p>
+            </div>
+        </div>
+
+        <div class="featured-courses">
+            <h3 class="featured-title">Popular Programmes</h3>
+            <div class="courses-grid">
+                <div class="course-card">
+                    <span class="course-tag">IT</span>
+                    <h4>Diploma in Software Development</h4>
+                    <p>Develop real-world programming and software engineering skills.</p>
+                    <a href="#applyModal" onclick="toggleModal(event)">Apply Now</a>
+                </div>
+
+                <div class="course-card">
+                    <span class="course-tag">Business</span>
+                    <h4>Higher Certificate in Business Management</h4>
+                    <p>Gain practical leadership and management experience.</p>
+                    <a href="#applyModal" onclick="toggleModal(event)">Apply Now</a>
+                </div>
+
+                <div class="course-card">
+                    <span class="course-tag">Engineering</span>
+                    <h4>National Certificate Engineering Studies</h4>
+                    <p>Build technical expertise for modern engineering industries.</p>
+                    <a href="#applyModal" onclick="toggleModal(event)">Apply Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- CAMPUS LIFE & EXPERIENCE GALLERY -->
+  <section class="section" id="campus-life">
+    <div class="container">
+        <div class="services-header">
+            <h2 class="services-title">The Campus Experience</h2>
+            <p class="services-subtitle">Explore our state-of-the-art facilities, vibrant student life, and unforgettable academic milestones across our national campuses.</p>
+        </div>
+
+        <div class="campus-gallery-grid">
+            <!-- Card 1: Graduation -->
+            <div class="gallery-card featured-wide">
+                <img src="/static/assets/WhatsApp Image 2026-06-25 at 16.35.52 (3).jpeg" alt="Graduation Ceremony">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">Milestones</span>
+                    <h4>Graduation & Academic Excellence</h4>
+                    <p>Celebrating the hard work and triumphs of our graduates as they step into professional careers.</p>
+                </div>
+            </div>
+
+            <!-- Card 2: Practical Training -->
+            <div class="gallery-card">
+                <img src="/static/assets/WhatsApp Image 2026-06-25 at 16.35.52.jpeg" alt="Work-Integrated Learning">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">Experiential</span>
+                    <h4>Work-Integrated Learning</h4>
+                    <p>On-site industry exposure and experiential learning for real-world preparedness.</p>
+                </div>
+            </div>
+
+            <!-- Card 3: Modern Reception -->
+            <div class="gallery-card">
+                <img src="/static/assets/WhatsApp Image 2026-06-25 at 16.35.53.jpeg" alt="Modern Campus Lounge">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">Facilities</span>
+                    <h4>Modern Campus Environments</h4>
+                    <p>Creative collaborative spaces and modern student resource centers designed to spark innovation.</p>
+                </div>
+            </div>
+
+            <!-- Card 4: Bloemfontein Campus -->
+            <div class="gallery-card">
+                <img src="/static/assets/WhatsApp Image 2026-06-25 at 16.35.52 (1).jpeg" alt="Bloemfontein Campus Hub">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">Campuses</span>
+                    <h4>Bloemfontein Regional Campus</h4>
+                    <p>One of our 11 tech-ready national hubs fostering community and higher education.</p>
+                </div>
+            </div>
+
+            <!-- Card 5: Main Campus Exterior -->
+            <div class="gallery-card featured-tall">
+                <img src="/static/assets/WhatsApp Image 2026-06-25 at 16.35.53 (1).jpeg" alt="Accredited Campus Infrastructure">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">Architecture</span>
+                    <h4>Accredited Infrastructure</h4>
+                    <p>Safe, dynamic, and professionally managed institutional properties built around your education.</p>
+                </div>
+            </div>
+
+            <!-- Card 6: Secondary Campus View -->
+            <div class="gallery-card">
+                <img src="/static/assets/WhatsApp Image 2026-06-25 at 16.35.52 (2).jpeg" alt="Tertiary Academic Spaces">
+                <div class="gallery-overlay">
+                    <span class="gallery-tag">Accreditation</span>
+                    <h4>Private Tertiary Spaces</h4>
+                    <p>A vibrant ecosystem offering industry-registered qualifications across multiple faculties.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- ABOUT US SECTION -->
+  <section class="section" id="about">
+    <div class="container">
+        <h2>About Us</h2>
+        <p>CTU Training Solutions is a private higher education institution established in 1987. The institution provides career-focused education and training through its Career and Corporate divisions, helping students and professionals develop skills that meet industry demands.</p>
+
+        <h3>Our Commitment</h3>
+        <p>At CTU, we are committed to fostering innovation, creative thinking, and technological proficiency. Through a variety of study options across faculties such as Information Technology, Design, Business, Engineering, and Humanities, we prepare students for successful and rewarding careers.</p>
+
+        <h3>Accreditations & Certifications</h3>
+        <div class="accreditation-cards">
+            <div class="card p-3">
+                <i class="fas fa-award card-icon mb-2"></i>
+                <h4>QCTO Accredited</h4>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- ================= updated contact section ================= -->
+   <section class="section" id="contact">
+    <div class="container">
+        
+        <div class="services-header">
+            <h2 class="services-title">Get in Touch</h2>
+            <p class="services-subtitle">Have any questions? Drop us a message and we'll get back to you shortly.</p>
+        </div>
+
+        <div class="contact-form-wrapper">
+            <form action="/contact-submit" method="POST" class="crm-contact-form">
+                
+                <div class="input-group">
+                    <label for="contact_name">Full Name</label>
+                    <input type="text" id="contact_name" name="name" required placeholder="Enter your full name">
+                </div>
+
+                <div class="input-group">
+                    <label for="contact_email">Email Address</label>
+                    <input type="email" id="contact_email" name="email" required placeholder="Enter your email">
+                </div>
+
+                <div class="input-group">
+                    <label for="contact_message">How can our team help you?</label>
+                    <textarea id="contact_message" name="message" required placeholder="Type your detailed message or inquiry here."></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary">Submit</button>
+            </form>
+            {% for category, message in get_flashed_messages(with_categories=true) %}
+              <p style="color:red; font-size:20px;">
+                {{ category }} - {{ message }}
+              </p>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="section bg-light py-5" id="footer">
+    <div class="container">
+      <div class="row gy-4 align-items-top">
+        
+        <!-- Logo Column -->
+        <div class="col-md-4 text-center text-md-start">
+          <img src="/static/assets/ctulogo2.png" alt="CTU Training Solutions Private Tertiary Education" class="img-fluid" style="max-height: 50px;">
+        </div>
+
+        <!-- Quick Links Column -->
+        <nav class="col-6 col-md-4 footer-QuickLinks">
+          <h3 class="h5 fw-bold text-dark mb-3">Quick Links</h3>
+          <div class="d-flex flex-column gap-2 footer-links">
+            <a href="#hero" class="text-decoration-none text-secondary">Home</a>
+            <a href="#services" class="text-decoration-none text-secondary">Services</a>
+            <a href="#about" class="text-decoration-none text-secondary">About</a>
+          </div>
+        </nav>
+
+        <!-- Contact Column -->
+        <div class="col-6 col-md-4 footer-ContactUs">
+          <h3 class="h5 fw-bold text-dark mb-3">Contact Us</h3>
+          <p class="mb-1 text-secondary">083 825 9366</p>
+          <p class="mb-1 text-secondary">081 750 4563 - Customer Service</p>
+          <a href="mailto:customerservice@ctutraining.co.za" class="text-decoration-none text-primary">customerservice@ctutraining.co.za</a>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- APPLICATION MODAL SYSTEM -->
+  <div id="applyModal" class="modal-overlay">
+    <div class="modal-box">
+        <span class="close-btn" onclick="toggleModal(event)">&times;</span>
+        <h2>Student Application Form</h2>
+        <p>Take your next step with CTU Solutions.</p>
+ 
+        <form action="/apply" method="POST" enctype="multipart/form-data">
+            <div class="modal-input-group">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" required placeholder="Enter your first name">
+            </div>
+            
+            <div class="modal-input-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" required placeholder="Enter your last name">
+            </div>
+            
+            <div class="modal-input-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="name@example.com">
+            </div>
+            
+            <div class="modal-input-group">
+                <label for="program">Intended Program</label>
+                <select id="program" name="program">
+                    <option value="it_diploma">Diploma in Information Technology</option>
+                    <option value="soft_eng">Software Engineering Cert</option>
+                    <option value="cyber_security">Cyber Security Specialist</option>
+                </select>
+            </div>
+ 
+            <div class="modal-input-group">
+                <label for="matric_results">Upload Matric Results (PDF / Image)</label>
+                <input type="file" id="matric_results" name="matric_results" accept=".pdf,.jpg,.jpeg,.png" required>
+            </div>
+ 
+            <button type="submit" class="modal-submit-btn">Submit Application</button>
+        </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT ENGINE -->
+  <script>
+  function toggleModal(event) {
+      if (event) event.preventDefault();
+      var modal = document.getElementById("applyModal");
+      modal.classList.toggle("show");
+  }
+  </script>
+
+  <!-- Bootstrap 5 JS bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

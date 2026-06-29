@@ -2,9 +2,10 @@ services:
 
   nginx:
     image: nginx:latest
-    container_name: nginx
+    container_name: ctu_nginx
 
     ports:
+      - "80:80"
       - "443:443"
 
     volumes:
@@ -13,54 +14,61 @@ services:
 
     depends_on:
       - webapp1
-      - webapp2
 
   webapp1:
-    build: ./website
+    build: .
     container_name: webapp1
-    ports:
-      - "3000:3000"
 
     environment:
+      FLASK_SECRET_KEY: replace-with-a-secure-key
+      EMAIL_ADDRESS: ${EMAIL_USERNAME_ENV}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD_ENV}
+      INSTANCE_NAME: WebApp1
+
       DB_HOST: postgres
       DB_PORT: 5432
       DB_NAME: portaldb
       DB_USER: postgres
       DB_PASSWORD: postgres
 
-    depends_on:
-      - postgres
+    expose:
+      - "3001"
+
 
   webapp2:
-    build: ./webapp
+    build: .
     container_name: webapp2
-    ports:
-      - "8080:8080"
 
     environment:
+      FLASK_SECRET_KEY: replace-with-a-secure-key
+      EMAIL_ADDRESS: ${EMAIL_USERNAME_ENV}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD_ENV}
+      INSTANCE_NAME: WebApp2
+
       DB_HOST: postgres
       DB_PORT: 5432
       DB_NAME: portaldb
       DB_USER: postgres
       DB_PASSWORD: postgres
-      INSTANCE_NAME: Web_App_2
-      EMAIL_PASSWORD: "pmpk zvvg mtut ajty"
 
-    depends_on:
-      - postgres
+    expose: 
+    - "3001"
+
 
   postgres:
     image: postgres:17
-
     container_name: postgres
 
     environment:
       POSTGRES_DB: portaldb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres:/docker-entrypoint-initdb.d
 
 volumes:
   postgres_data:
+
+

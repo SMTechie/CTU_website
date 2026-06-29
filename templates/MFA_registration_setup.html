@@ -4,33 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MFA Security Setup - CTU Solutions</title>
-    <link rel="stylesheet" href="/websitename/static/login.style.css">
-    <style>
-        .qr-container {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            display: inline-block;
-            margin: 20px auto;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
-        }
-        .qr-container img {
-            display: block;
-            max-width: 180px;
-            height: auto;
-        }
-        .setup-instructions {
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 10px;
-            line-height: 1.5;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/main.css">
 </head>
 <body>
     <div class="login-container">
-        <div class="login-card" style="text-align: center;">
+        <div class="login-card login-card--centered">
             <h2>MFA Activation</h2>
             <p class="setup-instructions">
                 Scan this QR code using <strong>Google Authenticator</strong> or <strong>Microsoft Authenticator</strong> on your phone.
@@ -43,14 +21,14 @@
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="flash-{{ category }}" style="color: #d9534f; background-color: #f2dede; border: 1px solid #ebccd1; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-weight: bold; font-size: 0.85rem;">
+                        <div class="flash-message flash-{{ category }}">
                             {{ message }}
                         </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
 
-            <form action="/mfa/setup/confirm" method="POST" style="text-align: left;">
+            <form action="/mfa/setup" method="POST">
                 <div class="form-group">
                     <label for="mfa_code">Enter 6-Digit Verification Token</label>
                     <input 
@@ -61,7 +39,7 @@
                         maxlength="6" 
                         required 
                         autocomplete="off"
-                        style="text-align: center; font-size: 1.2rem; letter-spacing: 4px;"
+                        class="form-control totp-input"
                     >
                 </div>
                 

@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRM Internal Management Portal - CTU</title>
-    <link rel="stylesheet" href="/websitename/static/tickets.style.css">
+    <link rel="stylesheet" href="/static/css/tickets.style.css">
 </head>
 <body>
     <nav class="navbar">
     <div class="container">
         <div class="logo">
-            <a href="#hero" id="hero"><img src="/websitename/static/assets/ctulogo2.png" alt="logo"></a>
+            <a href="#hero" id="hero"><img src="/static/assets/ctulogo2.png" alt="logo"></a>
             <form action="/logout" method="GET">
                 <button type="submit">Logout</button>
             </form>
@@ -68,7 +68,7 @@
         });
 
         function loadTicket(id) {
-        fetch(`/websitename/portal/tickets/${id}`)
+        fetch(`dashboard/${id}`)
             .then(res => res.json())
             .then(data => {
 
@@ -95,7 +95,7 @@
                         ${data.message}
                     </div>
 
-                    <form method="POST" action="/websitename/portal/tickets/${data.id}/update" class="status-form">
+                    <form method="POST" action="tickets/${data.id}/update" class="status-form">
                         <label for="status" class="form-label">Modify Operational Status:</label>
                         <div class="input-group">
                             <select name="status" class="form-select">
@@ -113,7 +113,7 @@
                         ${commentsHTML}
                     </div>
 
-                    <form method="POST" action="/websitename/portal/tickets/${data.id}/comment">
+                    <form method="POST" action="tickets/${data.id}/comment">
                         <textarea name="comment" class="form-control form-textarea" placeholder="Add comment..."></textarea>
                         <button type="submit" class="btn">Submit Comment</button>
                     </form>

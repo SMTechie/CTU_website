@@ -1,0 +1,544 @@
+/* ==========================================================================
+   main.css - Master Stylesheet Architecture
+   ========================================================================== */
+
+/* 1. Global System Variables & Variables */
+
+/* 1. Import all component stylesheets */
+@import url("./navbarstylesheet.css");
+@import url("./heroCSS_CTU_SITE_UPDATED.css");
+@import url("./services.css");
+@import url("./about.css");
+@import url("./contactformstyle.css");
+@import url("./footerstyle.css");
+@import url("./courses.css");
+@import url("./form.css");
+@import url("./campus.css");
+
+:root {
+    --primary: #3B82F6;
+    --border-color: #c9c9c9;
+    --header-color: black;
+    --paragraph-color: #6d6d6d;
+}
+
+/* 2. Import Component Modularity Layouts */
+@import url("./navbarstylesheet.css");
+@import url("./heroCSS_CTU_SITE_UPDATED.css");
+@import url("./services.css");
+@import url("./about.css");
+@import url("./contactformstyle.css");
+@import url("./footerstyle.css");
+
+/* 3. Base Boilerplate Core Overrides */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+}
+
+.section {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+h1{
+    font-size: 2.5rem;
+}
+
+h2{
+    font-size: 2rem;
+}
+
+h3{
+    font-size: 1.5rem;
+}
+
+/* Login page styling */
+.login-container {
+    max-width: 420px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+}
+
+.login-container .logo {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-container .logo h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #111827;
+}
+
+.login-container .logo p {
+    margin: 0.4rem 0 0;
+    color: #6b7280;
+}
+
+.input-group {
+    margin-bottom: 1.25rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #374151;
+    font-weight: 600;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.95rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    color: #111827;
+    background: #f9fafb;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.95rem 1rem;
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn:hover {
+    background: #1d4ed8;
+}
+
+.forgot-password {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.forgot-password a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer {
+    margin-top: 1.75rem;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.flash-danger {
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    padding: 0.85rem 1rem;
+    border-radius: 0.75rem;
+}
+
+.ticket-page {
+    padding: 2rem 0 3rem;
+}
+
+.ticket-grid {
+    display: grid;
+    grid-template-columns: 380px minmax(0, 1fr);
+    gap: 2rem;
+}
+
+.ticket-card-panel,
+.ticket-detail-panel {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06);
+    padding: 1.5rem;
+}
+
+.ticket-card-panel h2,
+.ticket-detail-panel h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #111827;
+}
+
+.ticket-list-container {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.ticket-item {
+    padding: 1rem 1rem 0.9rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.95rem;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.ticket-item:hover {
+    background: #f8fafc;
+    border-color: #dbeafe;
+    transform: translateY(-1px);
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: #111827;
+    background: #e0f2fe;
+}
+
+.status-new {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.client-title {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: #111827;
+    font-size: 0.95rem;
+}
+
+.subject-meta {
+    display: block;
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.ticket-detail-panel {
+    min-height: 480px;
+}
+
+.panel-divider {
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+    margin: 1rem 0;
+}
+
+.description-well {
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 0.9rem;
+    margin-bottom: 1.5rem;
+    color: #374151;
+    line-height: 1.8;
+}
+
+.comment-box {
+    padding: 1rem;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.comment-box strong {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #111827;
+}
+
+.comment-box small {
+    color: #6b7280;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.status-form,
+.status-form .input-group {
+    display: grid;
+    gap: 0.9rem;
+}
+
+.form-textarea {
+    width: 100%;
+    min-height: 130px;
+    border: 1px solid #d1d5db;
+    border-radius: 0.95rem;
+    padding: 1rem;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.form-label {
+    font-weight: 700;
+    color: #111827;
+}
+
+.ticket-page .btn {
+    width: auto;
+}
+
+@media (max-width: 980px) {
+    .ticket-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.flash-message {
+    background: #f8fafc;
+    border: 1px solid #d1d5db;
+    color: #1f2937;
+    padding: 0.95rem 1rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.65);
+    z-index: 1050;
+    padding: 1.5rem;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal-box {
+    width: min(100%, 650px);
+    background: #ffffff;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 24px 80px rgba(15, 23, 42, 0.18);
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.06);
+    color: #111827;
+}
+
+.dashboard-container {
+    max-width: 1200px;
+    margin: 2.5rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #CC1719;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+    font-size: 1.9rem;
+    color: #111827;
+}
+
+.dashboard-role {
+    margin: 0.4rem 0 0;
+    color: #4b5563;
+}
+
+.dashboard-logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 150px;
+}
+
+.metrics-grid {
+    display: grid;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.emphasized-card {
+    background: #f8f9fa;
+    border-left: 5px solid #CC1719;
+    padding: 1.75rem;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.emphasized-card h3 {
+    margin: 0 0 0.75rem;
+    color: #374151;
+}
+
+.metric-value {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.metric-label {
+    margin: 0.75rem 0 0;
+    color: #6b7280;
+}
+
+.content-split {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+.dashboard-table th,
+.dashboard-table td {
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.dashboard-table thead tr {
+    background: #111827;
+    color: #ffffff;
+}
+
+.dashboard-table th {
+    text-align: left;
+    font-weight: 700;
+}
+
+.dashboard-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.table-bold {
+    font-weight: 700;
+}
+
+.text-muted {
+    color: #4b5563;
+}
+
+.status-pill {
+    display: inline-block;
+    padding: 0.45rem 0.85rem;
+    background: #e3f2fd;
+    color: #0d47a1;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.form-control-section {
+    background: #fdfdfd;
+    padding: 1.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+}
+
+.admin-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.form-field {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.form-field label {
+    font-weight: 700;
+    color: #111827;
+}
+
+.form-field input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.75rem;
+    background: #ffffff;
+    color: #111827;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-danger {
+    background: #dc2626;
+    color: #ffffff;
+    border: none;
+}
+
+.btn:hover {
+    opacity: 0.95;
+}
+
+.totp-input {
+    text-align: center;
+    font-size: 1.2rem;
+    letter-spacing: 0.35rem;
+}
+
+.setup-instructions {
+    color: #4b5563;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+.login-card--centered {
+    text-align: center;
+}
+
+.qr-container {
+    display: inline-block;
+    padding: 1rem;
+    margin: 1.25rem auto 1.75rem;
+    background: #ffffff;
+    border-radius: 1rem;
+    box-shadow: inset 0 0 0.8rem rgba(15, 23, 42, 0.05);
+}
+
+.qr-container img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+}

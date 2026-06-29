@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Two-Factor Verification - CTU Solutions</title>
-    <link rel="stylesheet" href="/websitename/static/login.style.css">
+    <link rel="stylesheet" href="/static/css/main.css">
 </head>
 <body>
     <div class="login-container">
         <div class="login-card">
             <h2>Two-Factor Security</h2>
-            <p style="color: #555; font-size: 0.9rem; margin-bottom: 20px;">Please open your mobile authenticator application to fetch your active security code.</p>
+            <p class="setup-instructions">Please open your mobile authenticator application to fetch your active security code.</p>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="flash-{{ category }}" style="color: #d9534f; background-color: #f2dede; border: 1px solid #ebccd1; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-weight: bold; font-size: 0.85rem;">
+                        <div class="flash-message flash-{{ category }}">
                             {{ message }}
                         </div>
                     {% endfor %}
@@ -33,7 +33,7 @@
                         maxlength="6" 
                         required 
                         autocomplete="off"
-                        style="text-align: center; font-size: 1.2rem; letter-spacing: 4px;"
+                        class="form-control totp-input"
                     >
                 </div>
                 
