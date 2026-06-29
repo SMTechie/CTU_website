@@ -35,6 +35,25 @@ services:
       - "3001"
 
 
+  webapp2:
+    build: .
+    container_name: webapp2
+
+    environment:
+      FLASK_SECRET_KEY: replace-with-a-secure-key
+      EMAIL_ADDRESS: ${EMAIL_USERNAME_ENV}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD_ENV}
+      INSTANCE_NAME: WebApp2
+
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: portaldb
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+
+    expose: 
+    - "3001"
+
 
   postgres:
     image: postgres:17
