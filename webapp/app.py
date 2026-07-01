@@ -293,7 +293,9 @@ def create_ticket():
 ###################################################################
 @app.route('/users')
 def users():
-    return render_template('users.html')
+    users = users_service.get_users()
+
+    return render_template('users.html', users=users)
 
 @app.route('/user-create', methods=['GET', 'POST'])
 def add_user():
