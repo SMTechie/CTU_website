@@ -10,6 +10,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 import email_service
 import mfa
+import users_service
 import ticket_service
 
 app = Flask(
@@ -47,7 +48,7 @@ def require_login():
 def login():
     if request.method == 'GET':
         if is_authenticated():
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('tickets'))
         return render_template('login.html')
     
     username = request.form.get('username')
@@ -105,13 +106,7 @@ def mfa_setup():
     
     token = request.form.get('mfa_code')
 
-    print("POST reached")
-
-    print("Token:", token)
-    print("Secret:", totp_secret)
-
     valid = mfa.verify_totp(totp_secret, token)
-    print("Valid:", valid)
 
     if totp_secret and mfa.verify_totp(totp_secret, token):
         session['mfa_verified'] = True
@@ -120,8 +115,18 @@ def mfa_setup():
     flash('Invalid Token entered, Please try again', 'danger')
     return redirect(url_for('mfa_setup'))
 
+###################################################################
+# Dashboard
+###################################################################
 @app.route('/dashboard')
 def dashboard():
+    return render_template('dashboard.html')
+
+###################################################################
+# Tickets
+###################################################################
+@app.route('/tickets')
+def tickets():
     if not is_authenticated():
         return redirect(url_for('login'))
 
@@ -142,7 +147,7 @@ def dashboard():
 
     return render_template("tickets.html", tickets=tickets, first_ticket_id=first_ticket_id)
 
-@app.route('/dashboard/<int:ticket_id>')
+@app.route('/tickets/<int:ticket_id>')
 def get_ticket(ticket_id):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -206,7 +211,7 @@ def update_ticket_status(ticket_id):
     except Exception as e:
         print("Email failed:", e)
 
-    return redirect(url_for('dashboard'))
+    return redirect(url_for('tickets'))
 
 
 @app.route('/tickets/<int:ticket_id>/comment', methods=['POST'])
@@ -243,7 +248,7 @@ def add_comment(ticket_id):
         print("Comment email failed:", e)
 
 
-    return redirect(url_for('dashboard'))
+    return redirect(url_for('tickets'))
 
 ###################################################################
 # HOME Page
@@ -282,6 +287,25 @@ def create_ticket():
         print(e)
 
     return redirect(url_for('home'))
+
+###################################################################
+# Users
+###################################################################
+@app.route('/users')
+def users():
+    return render_template('users.html')
+
+@app.route('/user-create', methods=['GET', 'POST'])
+def add_user():
+    if request.method == 'POST':
+        success, message = users_service.create_user(request.form)
+
+        flash(message) 
+
+        if success:
+            return redirect(url_for('users'))
+    
+    return redirect(url_for('users'))
 
 
 if __name__ == '__main__':
