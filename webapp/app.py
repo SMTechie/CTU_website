@@ -57,20 +57,21 @@ def login():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-    cursor.execute("SELECT password_hash, totp_secret, account_status FROM users WHERE username = %s;", (username,))
+    cursor.execute("SELECT password_hash, mfa_enabled, totp_secret, account_status FROM users WHERE username = %s;", (username,))
     user_record = cursor.fetchone()
 
     if not user_record:
         flash("Invalid identification matrix credentials.", "danger")
         return
 
+    mfa_enabled = user_record['mfa_enabled']
     db_password_hash = user_record['password_hash']
     totp_secret = user_record['totp_secret']
     account_status = user_record['account_status']
 
     close_db(cursor, conn)
 
-    if account_status != 'active':
+    if account_status != 'Active':
         flash("This account is currently deactivated.", "error")
         return redirect(url_for('login'))
     
@@ -79,7 +80,10 @@ def login():
         return redirect(url_for('login'))
 
     session['username'] = username
-    return redirect(url_for('mfa_setup'))
+    if mfa_enabled:
+        return redirect(url_for('mfa_verify'))
+    else:
+        return redirect(url_for('mfa_setup'))
 
 @app.route('/logout')
 def logout():
@@ -98,7 +102,6 @@ def mfa_setup():
 
     cursor.execute('SELECT totp_secret FROM users WHERE username = %s;', [username],)
     totp_secret = cursor.fetchone()['totp_secret']
-    close_db(cursor, conn)
 
     if request.method == 'GET':
         qr_base64 = mfa.generate_qr_image(username, totp_secret)
@@ -110,10 +113,44 @@ def mfa_setup():
 
     if totp_secret and mfa.verify_totp(totp_secret, token):
         session['mfa_verified'] = True
+        try:
+            cursor.execute('UPDATE users SET mfa_enabled = TRUE WHERE username = %s', (username,))
+            conn.commit()
+        except:
+            return redirect(url_for('dashboard'))
+        finally:
+            close_db(cursor, conn)
         return redirect(url_for('dashboard'))
     
+    close_db(cursor, conn)
     flash('Invalid Token entered, Please try again', 'danger')
     return redirect(url_for('mfa_setup'))
+
+
+@app.route('/mfa/verify', methods=['GET', 'POST'])
+def mfa_verify():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    username = session['username']
+
+    if request.method == 'POST':
+        conn = get_db_connection()
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        cursor.execute('SELECT totp_secret FROM users WHERE username = %s;', [username],)
+        totp_secret = cursor.fetchone()['totp_secret']
+        close_db(cursor, conn)
+
+        token = request.form.get('mfa_code')
+
+        if totp_secret and mfa.verify_totp(totp_secret, token):
+            session['mfa_verified'] = True
+            return redirect(url_for('dashboard'))
+        
+        flash('Invalid Token entered, Please try again', 'danger')
+        return redirect(url_for('mfa_verify'))
+    return render_template('mfa_verify.html')
+
 
 ###################################################################
 # Dashboard
@@ -307,6 +344,13 @@ def add_user():
         if success:
             return redirect(url_for('users'))
     
+    return redirect(url_for('users'))
+
+@app.route('/users/edit', methods=['POST'])
+def edit_user():
+    if request.method == 'POST':
+        success = users_service.edit_user(request.form)
+        
     return redirect(url_for('users'))
 
 

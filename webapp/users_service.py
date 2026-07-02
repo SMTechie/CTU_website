@@ -2,6 +2,7 @@ from psycopg2.extras import RealDictCursor
 import pyotp
 import bcrypt
 from database import get_db_connection, close_db
+from mfa import generate_new_secret
 
 def create_user(form):
     username = form["username"]
@@ -34,7 +35,7 @@ def get_users():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
 
-    query = 'SELECT username, mfa_enabled, account_status, created_at FROM users ORDER BY username'
+    query = 'SELECT user_id, username, mfa_enabled, account_status, created_at FROM users ORDER BY username'
 
     try:
         cursor.execute(query)
@@ -46,3 +47,33 @@ def get_users():
         return False
     finally:
         close_db(cursor, conn)
+
+
+def edit_user(form):
+    user_id = form['user_id']
+    account_status = form['account_status']
+    reset_mfa = 'reset_mfa' in form
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if reset_mfa:
+        new_secret = generate_new_secret() 
+
+    try:
+        query = 'UPDATE users SET account_status = %s WHERE user_id = %s'
+        cursor.execute(query,(account_status, user_id))
+
+        if reset_mfa:
+            query = 'UPDATE users SET mfa_enabled = FALSE, totp_secret = %s WHERE user_id = %s'
+            cursor.execute(query, (new_secret, user_id))
+
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        return False, f'Failed to saved changes: {e}'
+    finally:
+        close_db(cursor, conn)
+
+    return True, 'Successfully saved to database'
+    
