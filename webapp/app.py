@@ -24,10 +24,12 @@ app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY")
 # Database connection
 def get_db_connection():
     return psycopg2.connect(
-        host="postgres",        
-        database="portaldb",
+        host=os.environ.get("DB_HOST"),
+        port=int(os.environ.get("DB_PORT", 5432)),
+        database=os.environ.get("DB_NAME"),
         user=os.environ.get("DB_USER"),
-        password=os.environ.get("DB_PASSWORD")
+        password=os.environ.get("DB_PASSWORD"),
+        sslmode="require"
     )
 
 def close_db(cursor, conn):
