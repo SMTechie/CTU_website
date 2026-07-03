@@ -33,3 +33,7 @@ def generate_qr_image(username, secret):
 def verify_totp(secret, code):
     totp = pyotp.TOTP(secret)
     return totp.verify(code, valid_window=1)
+
+def generate_new_secret():
+    secret = pyotp.random_base32()
+    return secret

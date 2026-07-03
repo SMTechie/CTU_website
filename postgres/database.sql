@@ -16,7 +16,7 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     mfa_enabled BOOLEAN DEFAULT FALSE NOT NULL,
     totp_secret VARCHAR(128) DEFAULT NULL,                         
-    account_status VARCHAR(20) DEFAULT 'active' NOT NULL, 
+    account_status VARCHAR(20) DEFAULT 'Active' NOT NULL, 
     failed_login_attempts INT DEFAULT 0 NOT NULL,
     last_login_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,

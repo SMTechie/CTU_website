@@ -1,20 +1,13 @@
+/*
 body { 
     display: block; 
     padding: 40px 20px; 
-    max-width: 1400px; /* Widened slightly to match the spacious layout */
+    max-width: 1400px; 
     margin: 0 auto; 
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f8fafc; /* Matched to main site body background */
+    background-color: #f8fafc;
     color: #1e293b;
-}
-
-/* --- Header Panel Layout --- */
-.navbar .logo img {
-    height: 100px;       
-    width: auto;         
-    display: block;
-    max-width: 100%;     
-}
+}*/
 
 .crm-header { 
     margin-bottom: 35px; 
