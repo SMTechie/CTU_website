@@ -6,23 +6,33 @@
     <title>Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
 </head>
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container">
+<div class="container-fluid py-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>Users</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1 class="fw-bold mb-1">Users</h1>
+            <p class="text-muted mb-0">
+                Manage user accounts and permissions
+            </p>
+        </div>
 
         <button
-            class="btn btn-primary"
+            class="btn btn-primary px-4"
             data-bs-toggle="modal"
             data-bs-target="#createUserModal">
+
+            <i class="bi bi-plus-lg me-2"></i>
             Create User
+
         </button>
+
     </div>
-</div>
 
 <!-- Modal -->
 <div class="modal fade" id="createUserModal" tabindex="-1">
@@ -83,64 +93,144 @@
     </div>
 </div>
 
-<div class="container">
-    <table class="table align-middle table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Username</th>
-                <th scope="col">MFA Enabled</th>
-                <th scope="col">Account Status</th>
-                <th scope="col">Created At</th>
-                <th scope="col">Actions</th>
-            </tr>
-        </thead>
-        <tbody class="table-group-divider">
-            {% for user in users %}
-            <tr class="{% if user.account_status == 'inactive' %} table-secondary text-muted{% endif %}">
-                <td>{{ user.username }}</td>
-                <td>
-                    {% if user.mfa_enabled %}
-                        <span class="badge text-bg-success">
-                            <i class="bi bi-shield-check me-1"></i>
-                            Enabled
-                        </span>
-                    {% else %}
-                        <span class="badge text-bg-warning">
-                            <i class="bi bi-shield-x me-1"></i>
-                            Disabled
-                        </span>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if user.account_status == "Active" %}
-                        <span class="badge text-bg-success">
-                            <i class="bi bi-check-circle-fill me-1"></i>
-                            Active
-                        </span>
-                    {% else %}
-                        <span class="badge text-bg-danger">
-                            <i class="bi bi-exclamation-circle-fill me-1"></i>
-                            Inactive
-                        </span>
-                    {% endif %}
-                </td>
-                <td>{{ user.created_at }}</td>
-                <td>
-                    <button class="btn btn-sm btn-outline-primary edit-user-btn" 
-                        data-bs-toggle="modal"
-                        data-bs-target="#editUserModal"
+<div class="row g-4 mb-4">
 
-                        data-id="{{ user.user_id }}"
-                        data-username="{{ user.username }}"
-                        data-status="{{ user.account_status }}"
-                        data-mfa="{{ user.mfa_enabled }}">
-                        <i class="bi bi-pencil"></i> Edit
-                    </button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+                <div class="text-muted">
+                    Total Users
+                </div>
+
+                <h2 class="fw-bold mb-0">
+                    {{ users|length }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div class="text-muted">
+                    MFA Enabled
+                </div>
+                <h2 class="fw-bold mb-0">
+                    {{ users|selectattr('mfa_enabled')|list|length }}
+                </h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div class="text-muted">
+                    Active Accounts
+                </div>
+                <h2 class="fw-bold mb-0">
+                    {{ users|selectattr('account_status','equalto','Active')|list|length }}
+                </h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+                <div class="text-muted">
+                    Never Logged In
+                </div>
+                <h2 class="fw-bold mb-0">
+                    {{ users|rejectattr('last_login_at')|list|length }}
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <table class="table align-middle table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col">MFA Enabled</th>
+                    <th scope="col">Account Status</th>
+                    <th scope="col">Last Login</th>
+                    <th scope="col">Created At</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for user in users %}
+                <tr class="{% if user.account_status == 'Inactive' %} table-secondary text-muted{% endif %}">
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center me-3"
+                                style="width:40px;height:40px;">
+                                {{ user.username[0]|upper }}
+                            </div>
+                            <div>
+                                <div class="fw-semibold">
+                                    {{ user.username }}
+                                </div>
+                                <small class="text-muted">
+                                    @{{ user.username|lower }}
+                                </small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        {% if user.mfa_enabled %}
+                            <span class="badge bg-success-subtle text-success">
+                                <i class="bi bi-shield-check me-1"></i>
+                                Enabled
+                            </span>
+                        {% else %}
+                            <span class="badge bg-warning-subtle text-warning">
+                                <i class="bi bi-shield-x me-1"></i>
+                                Disabled
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user.account_status == "Active" %}
+                            <span class="badge bg-success-subtle text-success">
+                                <i class="bi bi-check-circle-fill me-1"></i>
+                                Active
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger-subtle text-danger">
+                                <i class="bi bi-exclamation-circle-fill me-1"></i>
+                                Inactive
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.last_login_at|datetime }}</td>
+                    <td>{{ user.created_at|datetime }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary edit-user-btn" 
+                            data-bs-toggle="modal"
+                            data-bs-target="#editUserModal"
+
+                            data-id="{{ user.user_id }}"
+                            data-username="{{ user.username }}"
+                            data-status="{{ user.account_status }}"
+                            data-mfa="{{ user.mfa_enabled }}">
+                            <i class="bi bi-pencil"></i> Edit
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
@@ -260,6 +350,6 @@
     });
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
 {% endblock %}
 </html>
