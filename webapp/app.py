@@ -3,7 +3,8 @@ import sys
 import bcrypt
 import psycopg2
 import psycopg2.extras
-import logging
+from zoneinfo import ZoneInfo
+from datetime import datetime, timezone
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -38,6 +39,11 @@ def close_db(cursor, conn):
 def is_authenticated():
     return 'username' in session and session.get('mfa_verified', False)
 
+@app.template_filter('datetime')
+def format_datetime(value):
+    if value is None:
+        return 'Never'
+    return value.astimezone(ZoneInfo('Africa/Johannesburg')).strftime('%d %b %Y %H:%M')
 
 @app.before_request
 def require_login():
@@ -90,6 +96,17 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
+def update_last_login(username):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('UPDATE users SET last_login_at = %s WHERE username = %s', (datetime.now(timezone.utc), username))
+
+        conn.commit()
+        session['mfa_verified'] = True
+    finally:
+        close_db(cursor, conn)
 
 @app.route('/mfa/setup', methods=['GET', 'POST'])
 def mfa_setup():
@@ -111,8 +128,8 @@ def mfa_setup():
 
     valid = mfa.verify_totp(totp_secret, token)
 
-    if totp_secret and mfa.verify_totp(totp_secret, token):
-        session['mfa_verified'] = True
+    if valid:
+        update_last_login(username)
         try:
             cursor.execute('UPDATE users SET mfa_enabled = TRUE WHERE username = %s', (username,))
             conn.commit()
@@ -142,9 +159,10 @@ def mfa_verify():
         close_db(cursor, conn)
 
         token = request.form.get('mfa_code')
+        valid = mfa.verify_totp(totp_secret, token)
 
-        if totp_secret and mfa.verify_totp(totp_secret, token):
-            session['mfa_verified'] = True
+        if valid:
+            update_last_login(username)
             return redirect(url_for('dashboard'))
         
         flash('Invalid Token entered, Please try again', 'danger')

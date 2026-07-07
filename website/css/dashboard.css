@@ -1,0 +1,42 @@
+body{
+    background:#f8fafc;
+}
+
+.card{
+    border-radius:16px;
+    min-height: 120px;
+}
+
+.stat-card{
+    transition: all 0.2s ease;
+}
+
+.stat-card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 0.75rem 2rem rgba(0, 0 ,0 ,.15) !important;
+}
+
+.table td{
+    padding-top:18px;
+    padding-bottom:18px;
+}
+
+.table th{
+    text-transform:uppercase;
+    font-size:.82rem;
+    color:#6c757d;
+    letter-spacing:.05em;
+}
+
+.badge{
+    font-size:.8rem;
+    padding:.55em .8em;
+}
+
+.btn{
+    border-radius:10px;
+}
+
+.rounded-circle{
+    font-weight:600;
+}

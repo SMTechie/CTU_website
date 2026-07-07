@@ -35,7 +35,7 @@ def get_users():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
 
-    query = 'SELECT user_id, username, mfa_enabled, account_status, created_at FROM users ORDER BY username'
+    query = 'SELECT user_id, username, mfa_enabled, account_status, last_login_at, created_at FROM users ORDER BY username'
 
     try:
         cursor.execute(query)
