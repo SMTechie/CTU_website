@@ -4,6 +4,16 @@ body{
 
 .card{
     border-radius:16px;
+    min-height: 120px;
+}
+
+.stat-card{
+    transition: all 0.2s ease;
+}
+
+.stat-card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 0.75rem 2rem rgba(0, 0 ,0 ,.15) !important;
 }
 
 .table td{

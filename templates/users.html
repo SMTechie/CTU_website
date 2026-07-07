@@ -94,60 +94,91 @@
 </div>
 
 <div class="row g-4 mb-4">
-
     <div class="col-md-3">
-
-        <div class="card shadow-sm border-0 h-100">
-
-            <div class="card-body">
-
-                <div class="text-muted">
-                    Total Users
+        <div class="card stat-card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 rounded-3 p-3 me-3">
+                        <i class="bi bi-people-fill fs-2 text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted">
+                            Total Users
+                        </div>
+                        <h3 class="fw-bold mb-0">
+                            {{ users|length }}
+                        </h3>
+                        <small class="text-muted">
+                            Registered Accounts
+                        </small>
+                    </div>
                 </div>
-
-                <h2 class="fw-bold mb-0">
-                    {{ users|length }}
-                </h2>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-                <div class="text-muted">
-                    MFA Enabled
-                </div>
-                <h2 class="fw-bold mb-0">
-                    {{ users|selectattr('mfa_enabled')|list|length }}
-                </h2>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-                <div class="text-muted">
-                    Active Accounts
+        <div class="card stat-card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center">
+                    <div class="bg-success bg-opacity-10 rounded-3 p-3 me-3">
+                        <i class="bi bi-shield-lock-fill fs-2 text-success"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted ">
+                            MFA Enabled
+                        </div>
+                        <h3 class="fw-bold mb-0">
+                            {{ users|selectattr('mfa_enabled')|list|length }}
+                        </h3>
+                        <small class="text-muted">
+                            Secure Accounts
+                        </small>
+                    </div>
                 </div>
-                <h2 class="fw-bold mb-0">
-                    {{ users|selectattr('account_status','equalto','Active')|list|length }}
-                </h2>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-                <div class="text-muted">
-                    Never Logged In
+        <div class="card stat-card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center">
+                    <div class="bg-info bg-opacity-10 rounded-3 p-3 me-3">
+                        <i class="bi bi-check-circle-fill fs-2 text-info"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted">
+                            Active Accounts
+                        </div>
+                        <h3 class="fw-bold mb-0">
+                            {{ users|selectattr('account_status','equalto','Active')|list|length }}
+                        </h3>
+                        <small class="text-muted">
+                            Currently Active
+                        </small>
+                    </div>
                 </div>
-                <h2 class="fw-bold mb-0">
-                    {{ users|rejectattr('last_login_at')|list|length }}
-                </h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center">
+                    <div class="bg-warning bg-opacity-10 rounded-3 p-3 me-3">
+                        <i class="bi bi-clock-history fs-2 text-warning"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted">
+                            Never Logged In
+                        </div>
+                        <h3 class="fw-bold mb-0">
+                            {{ users|rejectattr('last_login_at')|list|length }}
+                        </h3>
+                        <small class="text-muted">
+                            Awaiting First Login
+                        </small>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
